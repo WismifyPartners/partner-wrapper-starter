@@ -7,10 +7,16 @@
  */
 
 export type WismifyEventPayload = {
-  /** Siempre "action.invoked" para invocaciones de acciones. */
-  event: 'action.invoked';
+  /**
+   * - `action.invoked`  — el agente cx clickó un botón de acción.
+   * - `dashboard.load`  — el agente cx abrió la pestaña de tu app en el sidebar
+   *   del tenant. Tu wrapper debe devolver Block Kit con el dashboard inicial
+   *   (estadísticas, formularios, etc.). Las sub-actions dentro funcionan igual.
+   */
+  event: 'action.invoked' | 'dashboard.load';
 
-  /** Acción invocada. Para sub-actions (de button/form), action_id puede venir aquí. */
+  /** Acción invocada. Para sub-actions (de button/form), action_id puede venir aquí.
+   *  Para `dashboard.load`, `id`/`label` son `"__dashboard__"`. */
   action: {
     id: string;
     label: string;

@@ -85,6 +85,37 @@ app.post('/actions/:actionSlug', async (req, res) => {
   }
 });
 
+/**
+ * Endpoint de DASHBOARD (opcional) — Wismify hace POST aquí cuando el agente
+ * abre la pestaña de tu app en el sidebar del tenant.
+ *
+ * Configúralo poniendo esta URL en el campo "Dashboard URL" del wizard.
+ *
+ * Recibe el mismo formato firmado, pero con `event: 'dashboard.load'`. Devuelve
+ * Block Kit (igual que las acciones). Las sub-actions (buttons/forms) dentro
+ * vuelven al endpoint `/actions/:slug` normal — usa el `action.id` que pongas
+ * en el button para enrutar.
+ */
+app.post('/dashboard', async (req, res) => {
+  const rawBody = (req as any).rawBody as string;
+  const signature = req.header('x-wismify-signature');
+  const verify = verifyWismifySignature(rawBody, signature, WEBHOOK_SECRET);
+  if (!verify.ok) {
+    return res.status(401).json({ error: `signature ${verify.reason}` });
+  }
+
+  // const payload = req.body as WismifyEventPayload;
+  // Aquí carga tus estadísticas, métricas, formularios, etc.
+  return res.json({
+    blocks: [
+      { type: 'heading', text: 'Tu dashboard' },
+      { type: 'text', text: 'Aquí puedes mostrar KPIs, formularios, accesos rápidos…' },
+      { type: 'divider' },
+      { type: 'text', text: 'Edita `src/index.ts` → `app.post(\'/dashboard\', …)` para personalizar.' },
+    ],
+  } satisfies WismifyResponse);
+});
+
 app.listen(PORT, () => {
   console.log(`✓ Wismify partner wrapper listening on :${PORT}`);
 });
