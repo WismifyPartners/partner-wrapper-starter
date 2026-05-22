@@ -40,8 +40,10 @@ export type WismifyEventPayload = {
       id: string;
       subject: string | null;
       status: string;
-      priority: string | null;
+      urgency: string | null;
       channel: string | null;
+      from_email: string | null;
+      from_name: string | null;
       created_at: string;
     };
     customer?: {
