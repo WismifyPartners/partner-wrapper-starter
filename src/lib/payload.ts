@@ -47,20 +47,28 @@ export type WismifyEventPayload = {
       created_at: string;
     };
     customer?: {
-      id: string;
+      id: string | null;
       name: string | null;
       email: string | null;
       phone: string | null;
+      shopify_customer_id: string | null;
     };
     shipment?: {
-      tracking_number?: string;
-      carrier?: string;
-      destination?: { city?: string; country?: string; address?: string };
+      order_id: string | null;
+      tracking_number: string | null;
+      carrier: string | null;
+      destination: {
+        address: string | null;
+        city: string | null;
+        country: string | null;
+        postcode: string | null;
+        customer_name: string | null;
+      } | null;
     } | null;
     carrier?: {
-      name?: string;
-      tracking_url?: string;
-      status?: string;
+      name: string | null;
+      tracking_url: string | null;
+      status: string | null;
     } | null;
   };
 
